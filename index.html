@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>H5队列</title>
+</head>
+
+<body>
+    <script>
+        function PriorityQueue() {
+            var items = [];
+
+            function QueEle(ele, priority) { //封装我们的元素为一个对象
+                this.ele = ele; //元素
+                this.priority = priority; //优先级
+            };
+            //往队伍添加元素
+            this.enqueue = function(ele, priority) {
+                var queObj = new QueEle(ele, priority); //创建队列元素对象
+                if (this.isEmpty()) { //如果队列是空的，直接插入
+                    items.push(queObj);
+                } else {
+                    var bAdded = false;
+                    for (var i = 0, len = items.length; i < len; i++) {
+                        if (priority < items[i].priority) {
+                            items.splice(i, 0, queObj); // 循环队列，如果优先级小于这个位置元素的优先级，插入
+                            bAdded = true;
+                            break;
+                        };
+                    };
+                    if (!bAdded) {
+                        items.push(queObj); // 如果循环一圈都没有找到能插队的位置，直接插入队列尾部
+                    };
+                };
+            };
+            //删除元素第一个
+            this.dequeue = function() {
+                return items.shift();
+            };
+            //拿到第一个元素
+            this.front = function() {
+                return items[0];
+            };
+            //判断数组中是否有为空
+            this.isEmpty = function() {
+                return items.length === 0;
+            };
+            //得到数组的长度
+            this.size = function() {
+                return items.length;
+            };
+            //将数组置空
+            this.clear = function() {
+                items = [];
+            };
+            //打印数组中的每一项元素
+            this.print = function() {
+                //这个地方稍微修改一下下
+                var temp = [];
+                for (var i = 0, len = items.length; i < len; i++) {
+                    temp.push(items[i].ele);
+                }
+                console.log(temp.toString());
+            };
+        };
+
+
+        var pQueue = new PriorityQueue();
+        pQueue.enqueue('Mr.A', 3);
+        pQueue.enqueue('Mr.B', 3);
+        pQueue.enqueue('Mr.C', 3);
+        console.log("原队列:");
+        pQueue.print();
+
+        pQueue.enqueue('VIP', 2);
+        pQueue.enqueue('SVIP', 1);
+        console.log("新队列:");
+        pQueue.print();
+    </script>
+</body>
+
+</html>
